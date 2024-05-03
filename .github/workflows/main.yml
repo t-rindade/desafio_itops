@@ -1,6 +1,6 @@
 name: automacao_senai
 run-name: ${{ github.actor }} Pipeline Deploy
-on: 
+on:
   push:
     branches:
       - "main"
@@ -20,17 +20,17 @@ jobs:
         run: |
           sudo apt update -y
           sudo apt-get install figlet -y
-          echo "TRINDADES" | figlet -f small
+          echo "TRINDADE" | figlet -f small
           curl https://static.snyk.io/cli/latest/snyk-linux -o snyk
           chmod +x ./snyk
           mv ./snyk /usr/local/bin/
-  
+
       - name: SNYK AUTH
         run: |
           snyk -d auth $SNYK_TOKEN
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_AUTH_TOKEN }}
-          
+
       - name: AWSCLI_CONFIG
         if: always()
         run: |
@@ -49,7 +49,7 @@ jobs:
         run: |
           echo "DOCKERLINT" | figlet -f small
           docker run --rm -i hadolint/hadolint < Dockerfile || true
-      
+
       - name: DOCKER_LOGIN
         if: always()
         uses: docker/login-action@v3
@@ -57,7 +57,7 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      
+
       - name: DOCKERBUILD(CI)
         if: always()
         run: |
@@ -66,13 +66,13 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          
+
       - name: DOCKERANALYSIS(CI)
         if: always()
         run: |
           echo "VULNERABILIDADES" | figlet -c -f small
           snyk container test apicontainer:latest || true
-          
+
       - name: DOCKERPUSH(CD)
         if: always()
         run: |
