@@ -1,7 +1,7 @@
 # Builder Stage
 FROM alpine:3.16 as builder
 
-# Install necessary packages
+# Install necessary packagess
 RUN apk add --no-cache wget unzip curl python3 py3-pip
 
 # Install Terraform
