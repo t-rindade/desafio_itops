@@ -7,6 +7,7 @@ on:
       - "developer"
     paths-ignore:
       - "*.txt"
+      - "a.txt"
 jobs:
   githubactions-senai:
     runs-on: ubuntu-latest
